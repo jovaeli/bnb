@@ -1,0 +1,61 @@
+﻿@model IEnumerable<BeautiesAndBarbers.Models.ClientList>
+
+@{
+    ViewBag.Title = string.Format("{0}'s Customer List - {1}", ViewBag.Employee.User.Name, ViewBag.Employee.Business.Name);
+}
+
+
+<h2>@ViewBag.Employee.User.Name's Customer List</h2>
+<h3>@ViewBag.Employee.Business.Name</h3>
+
+<p>
+    @Html.ActionLink("List me Up!", "CreateMe", "ClientLists", new { id = @ViewBag.Employee.EmployeeId }, new { }) | 
+    @Html.ActionLink("Back to Business", "Page", "Businesses", new { id = @ViewBag.Employee.BusinessId }, new { })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CustomerId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmployeeService.Service.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Appointment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ListStatus.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var customer in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => customer.Customer.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => customer.EmployeeService.Service.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => customer.Appointment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => customer.ListStatus.Description)
+        </td>
+        <td>
+            @**@
+            @if (customer.Customer.UserId == ViewBag.UserId)
+            {
+                if (customer.ListStatus.Unconfirmed == true || customer.ListStatus.Confirmed == true)
+                {
+                    @Html.ActionLink("Edit", "EditMe", new { id = customer.ClientListId }, new { @class = "btn btn-warning" }) 
+                    
+                    @Html.ActionLink("Cancel", "Cancel", new { id = customer.ClientListId }, new { @class = "btn btn-danger", style = "margin-left:2px"})
+                }
+            }
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BeautiesAndBarbers.Models.EmployeeService>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { id = ViewBag.EmployeeId }) |
+    @Html.ActionLink("Back to List", "EmployeeBusinesses")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Service.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsDisabled)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Service.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsDisabled)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { eId=item.EmployeeId, sId = item.ServiceId }) |
+            @Html.ActionLink("Details", "Details", new { eId = item.EmployeeId, sId = item.ServiceId }) |
+            @Html.ActionLink("Delete", "Delete", new { eId = item.EmployeeId, sId = item.ServiceId })
+        </td>
+    </tr>
+}
+
+</table>

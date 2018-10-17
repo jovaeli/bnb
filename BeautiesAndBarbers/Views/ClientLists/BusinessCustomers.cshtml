@@ -1,0 +1,50 @@
+﻿@model IEnumerable<BeautiesAndBarbers.Models.ClientListByCompanyViewModel>
+
+@{
+    ViewBag.Title = "BusinessCustomers";
+}
+
+<h2>Employee's Client Lists</h2>
+
+<p>
+    @Html.ActionLink("Back to Home", "Index", "Home")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BusinessName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ActiveClients)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DoneToday)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DoneTotal)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BusinessName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ActiveClients)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DoneToday)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DoneTotal)
+        </td>
+        <td>
+            @Html.ActionLink("Manage Clients", "Index", new { id = item.EmployeeId })
+        </td>
+    </tr>
+}
+
+</table>

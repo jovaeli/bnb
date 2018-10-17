@@ -1,0 +1,71 @@
+﻿@model IEnumerable<BeautiesAndBarbers.Models.BusinessHomeIndexViewModel>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<!--
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>    
+-->
+    
+<div class="row">
+    <div class="col-md-3">
+        
+        
+    </div>
+
+    <div class="col-md-6">
+        @foreach (var item in Model)
+            {
+            <br />
+
+                <div class="card" style="min-width:319px; border: 1px solid gray;"
+                     data-bnb-UserFavoriteBusinessId="@item.UserFavoriteBusinessId"
+                     data-bnb-CustomerUserId="@item.CustomerUserId"
+                     data-bnb-BusinessId="@item.BusinessId"
+                     data-bnb-IsFavorite="@item.IsFavorite">
+
+                    @if (!string.IsNullOrEmpty(item.Banner))
+                {
+                        <img class="card-img-top img-responsive"
+                             alt="Banner"
+                             @*style="width:150px;height:150px;max-width:100%; height:auto;"*@
+                             src="@Url.Content(item.Banner)" />
+                    }
+
+                    <div class="card-block" style="padding:0px 10px 0px 10px; margin-bottom:10px">
+                        <h4 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h4>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Slogan)</p>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td align="left" class="col-md-4">
+                                        <span class="glyphicon glyphicon-heart@(item.IsFavorite ? "" : "-empty")"
+                                              style="color:@(item.IsFavorite ? "darkred" : "lightgray"); cursor:pointer">
+                                            <span style="font-family: sans-serif">
+                                                Love it
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="col-md-2" align="right">
+                                        @Html.ActionLink("Details", "Page", "Businesses", new { id = item.BusinessId }, new { @class = "btn btn-success", style = "text-align:right" })
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+        }
+    </div>
+
+    <div class="col-md-3">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>

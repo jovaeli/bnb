@@ -1,0 +1,157 @@
+﻿@model BeautiesAndBarbers.Models.User
+
+@{
+    ViewBag.Title = string.Format("{0}'s Profile", Model.Name);
+}
+
+<h2>@string.Format("{0}'s Profile", Model.Name)</h2>
+
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        @Html.ActionLink("Back to List", "Index")
+    }
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+    @Html.ActionLink("Go to Home", "Index", "Home")
+</p>
+
+<div class="row">
+    <div class="col-md-3">
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Picture)
+            </dt>
+
+            <dd>
+                @if (!string.IsNullOrEmpty(Model.Picture))
+                {
+                    <img src="@Url.Content(Model.Picture)"
+                         alt="Profile Image"
+                         style="width:150px;height:150px;max-width:100%; height:auto;" />
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-9">
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.UserName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Nickname)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Nickname)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.FullName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FullName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+
+<h4>Addresses</h4> @Html.ActionLink("Create New", "Create", "Addresses", new { returnUrl = "~/Users/Details" }, new { })
+@if (Model.Addresses.Count == 0)
+{
+    <h5>You have not added any addresses yet.</h5>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().Address1)
+            </th>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().ZIP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().Country.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().IsDefault)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addresses.FirstOrDefault().IsDisabled)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Addresses.OrderByDescending(a => a.IsDisabled).ThenBy(a => a.Description))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZIP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsDefault)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsDisabled)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Addresses", new { id = item.AddressId, returnUrl = "~/Users/Details" }, new { })     
+                </td>
+            </tr>
+        }
+
+    </table>
+}

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<BeautiesAndBarbers.Models.ListStatus>
+
+@{
+    ViewBag.Title = "List Status";
+}
+
+<h2>List Status</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { }, new { @class = "btn btn-primary"})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PriorityLevel.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Active)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Completed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SystemStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Canceled)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Unconfirmed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Confirmed)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Current)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PriorityLevel.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Active)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Completed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SystemStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Canceled)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Unconfirmed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Confirmed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Current)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ListStatusId }, new { @class = "btn btn-warning" }) 
+            @Html.ActionLink("Details", "Details", new { id=item.ListStatusId }, new { @class = "btn btn-info" }) 
+            @Html.ActionLink("Delete", "Delete", new { id=item.ListStatusId }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

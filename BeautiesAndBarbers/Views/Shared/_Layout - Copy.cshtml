@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Countries", "Index", "Countries")</li>
+                                <li>@Html.ActionLink("List Status", "Index", "ListStatus")</li>
+                                <li>@Html.ActionLink("Priority Levels", "Index", "PriorityLevels")</li>
+                                <li>@Html.ActionLink("Services", "Index", "Services")</li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("User"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Address", "Index", "Addresses")</li>
+                                <li>@Html.ActionLink("Create Business", "Create", "Businesses")</li>
+                                <li>@Html.ActionLink("My Customers List", "Index", "Customers")</li>
+                                @if (Session["CurrentUserId"] != null)
+                                {
+                                    <li>@Html.ActionLink("Profile", "Details", "Users", new { id = (int)Session["CurrentUserId"]} , new { })</li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Owner"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Business<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Manage", "Index", "Businesses")</li>
+                                <li>@Html.ActionLink("Employees", "Index", "Employees")</li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Employee"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Employee<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Client Lists", "BusinessCustomers", "ClientLists")</li>
+                                <li>@Html.ActionLink("Services", "EmployeeBusinesses", "EmployeeServices")</li>
+                            </ul>
+                        </li>
+                    }
+
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.glyphicon').click(function () {
+                //alert("clicked");
+                //$('.startpoint').closest("li:has(*[data-findme])")
+                //$('.startpoint').closest("ul").find('[data-findme]')                
+                var love = $(this);
+                var businessCard = love.closest('.card');
+                
+                var customerId = businessCard.attr('data-bnb-CustomerUserId') * 1;
+                var isLogged = customerId == 0 ? false : true;
+
+                if (!isLogged) {
+                    window.location.href = "/Account/Login";
+                    return;
+                }
+
+                // Esta login
+                
+                var favoriteId = businessCard.attr('data-bnb-UserFavoriteBusinessId') * 1;
+                var favoriteIdExist = favoriteId > 0 ? true : false;
+                var businessId = businessCard.attr('data-bnb-BusinessId') * 1;
+                var isfavorite = businessCard.attr('data-bnb-IsFavorite') == "True" ? true : false;
+                var ajaxSucceed = false;
+                var location;
+                var newId;
+                
+                if (favoriteIdExist) {
+                    $.ajax({
+                        url: '/api/UserFavoriteBusinesses/' + favoriteId,
+                        method: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            UserFavoriteBusinessId: favoriteId,
+                            UserId: customerId,
+                            BusinessId: businessId,
+                            IsFavorite: !isfavorite
+                        }),
+                        success: function (response) {
+                            //TODO: handle edit response
+                        },
+                        error: function (jqXHR) {
+                            alert(text(jqXHR.responseText));
+                        }
+                    });
+                }
+
+                else if (!favoriteIdExist) {
+                    $.ajax({
+                        url: '/api/UserFavoriteBusinesses',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            UserId: customerId,
+                            BusinessId: businessId,
+                            IsFavorite: !isfavorite
+                        }),
+                        success: function (response, status, jqXHR) {
+                            location = jqXHR.getResponseHeader('Location');
+                            newId = location.substring(location.lastIndexOf('/') + 1);
+                            businessCard.attr("data-bnb-UserFavoriteBusinessId", newId);
+                            //TODO: handle badresponses
+                        },
+                        error: function (jqXHR) {
+                            alert(text(jqXHR.responseText));
+                        }
+                    });
+                }
+
+                if (isfavorite) {
+                    love.css({ "color": "lightgray", "cursor": "pointer" });
+                    love.attr("class", "glyphicon glyphicon-heart-empty");
+                    businessCard.attr("data-bnb-IsFavorite", "False");
+                }
+                else if (!isfavorite) {
+                    love.css({ "color": "darkred", "cursor": "pointer" });
+                    love.attr("class", "glyphicon glyphicon-heart");
+                    businessCard.attr("data-bnb-IsFavorite", "True");
+                }
+
+            }); //end click
+
+        });
+    </script>
+    
+</body>
+</html>

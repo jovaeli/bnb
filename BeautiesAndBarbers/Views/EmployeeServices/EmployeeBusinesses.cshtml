@@ -1,0 +1,37 @@
+﻿@model IEnumerable<BeautiesAndBarbers.Models.Employee>
+
+@{
+    ViewBag.Title = "EmployeeBusinesses";
+}
+
+<h2>Employee's Services By Businesses</h2>
+
+<p>
+    @Html.ActionLink("Back to Home", "Index", "Home")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Business.Name)
+        </th>
+        <th>
+            Total Services
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Business.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmployeeServices.Count)
+        </td>
+        <td>
+            @Html.ActionLink("Manage Services", "Index", new { id=item.EmployeeId })
+        </td>
+    </tr>
+}
+
+</table>

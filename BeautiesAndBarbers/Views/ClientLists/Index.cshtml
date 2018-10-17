@@ -1,0 +1,81 @@
+﻿@model IEnumerable<BeautiesAndBarbers.Models.ClientList>
+
+@{
+    ViewBag.Title = string.Format("{0}'s Customer List - {1}", ViewBag.Employee.User.Name, ViewBag.Employee.Business.Name);
+}
+
+
+<h2>@ViewBag.Employee.User.Name's Customer List</h2>
+<h3>@ViewBag.Employee.Business.Name</h3>
+
+<p>
+    @Html.ActionLink("Create New", "Create", new { id = ViewBag.Employee.EmployeeId }) |
+    @Html.ActionLink("Back to List", "BusinessCustomers")
+    @*@Html.ActionLink("Back to Business", "Details", "Businesses", new { id = Model.Select(m => m.EmployeeService.Employee).FirstOrDefault().BusinessId}, new { })*@
+    
+</p>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeService.Service.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListStatus.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="rowlink">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeService.Service.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Appointment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ListStatus.Description)
+                </td>
+                <td>
+                    @if (!(item.ListStatus.Completed == true || item.ListStatus.Canceled == true))
+                    {
+                        <div class="dropdown">
+                            <a class="dropdown-toggle rowlink" data-toggle="dropdown" href="#">
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                @if (item.ListStatus.Unconfirmed == true)
+                                {
+                                    <li>@Html.ActionLink("Confirm", "Confirm", new { id = item.ClientListId }, new { tabindex = "-1" })</li>
+                                }
+                                else if (item.ListStatus.Current == true)
+                                {
+                                    <li>@Html.ActionLink("Completed", "Completed", new { id = item.ClientListId }, new { tabindex = "-1" })</li>
+                                }
+                                else if (item.ListStatus.Confirmed == true)
+                                {
+                                    <li>@Html.ActionLink("Current", "Current", new { id = item.ClientListId }, new { tabindex = "-1" })</li>
+                                }
+
+                                <li>@Html.ActionLink("Edit", "Edit", new { id = item.ClientListId }, new { tabindex = "-1" })</li>
+                                <li>@Html.ActionLink("Cancel", "Cancel", new { id = item.ClientListId }, new { tabindex = "-1" })</li>
+                            </ul>
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

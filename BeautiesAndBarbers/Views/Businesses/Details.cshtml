@@ -1,0 +1,133 @@
+﻿@model BeautiesAndBarbers.Models.Business
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="row">
+    <h4>Business</h4>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.BusinessId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+    <hr />
+    <div class="col-md-6">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Banner)
+            </dt>
+
+            <dd>
+                @if (!string.IsNullOrEmpty(Model.Banner))
+            {
+                    <img src="@Url.Content(Model.Banner)"
+                         alt="Banner"
+                         style="width:150px;height:150px;max-width:100%; height:auto;" />
+                }
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Slogan)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Slogan)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-6">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Address.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Address.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User.UserName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User.UserName)
+            </dd>
+
+        </dl>
+    </div>
+</div>
+
+<h4>Employees</h4> @Html.ActionLink("Create New", "Create", "Employees", new { id = Model.BusinessId }, new { })
+@if (Model.Employees.Count == 0)
+{
+    <h5>You have not added any employees yet.</h5>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().IsDisabled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().EmployeePhoneHidden)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var employee in Model.Employees)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(@employee.User.Picture))
+                    {
+                        <img src="@Url.Content(@employee.User.Picture)"
+                                alt="Banner"
+                                style="width:75px;height:75px;max-width:100%; height:auto;" 
+                                class="img-circle"/>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.User.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.IsDisabled)
+                    @*@employee.EmployeeServices.SelectMany(es => es.ClientLists.Select(cl => cl.ListStatus).Where(ls => ls.Active == true)).Count()*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.EmployeePhoneHidden)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Employees", new { id = employee.EmployeeId }, new { })
+                    @*
+                        @Html.ActionLink("Customers", "Index", "ClientLists", new { id = employee.EmployeeId }, new { }) |
+                        @Html.ActionLink("List me Up!", "Create", "ClientLists", new { id = employee.EmployeeId }, new { })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+                    *@
+                </td>
+            </tr>
+        }
+    </table>
+}
+
